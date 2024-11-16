@@ -88,15 +88,27 @@ function Products() {
     { _id: "5", name: "Smart Watches" },
   ];
 
-  const [selectedCategoryId, setSelectedCategoryId] = useState("1");
+  const [selectedCategoryId, setSelectedCategoryId] = useState("ALL");
+  const [sortOrder, setSortOrder] = useState(null); // To track sort order
+
   const filteredProducts =
     selectedCategoryId === "ALL"
       ? products
       : products.filter((product) => product.categoryId === selectedCategoryId);
 
-    const handleTabClick = (_id) => {
-        setSelectedCategoryId(_id)
+  const sortedProducts = [...filteredProducts].sort((a, b) => {
+    if (sortOrder === "asc") {
+      return parseFloat(a.price) - parseFloat(b.price);
+    } else if (sortOrder === "desc") {
+      return parseFloat(b.price) - parseFloat(a.price);
     }
+    return 0;
+  });
+
+  const handleTabClick = (_id) => {
+    setSelectedCategoryId(_id);
+    setSortOrder(null);
+  };
 
   return (
     <section className="px-8 py-8">
@@ -105,15 +117,31 @@ function Products() {
       <div className="mt-4 flex items-center gap-4">
         {categories.map((category) => (
           <Tab
-            key={category._id}  
+            key={category._id}
             _id={category._id}
             selectedCategoryId={selectedCategoryId}
             name={category.name}
             onTabClick={handleTabClick}
           />
         ))}
+
+        <div className="flex gap-2 ml-auto">
+          <button
+            className="px-1 py-1 bg-gray-500 text-white rounded"
+            onClick={() => setSortOrder("asc")}
+          >
+            Sort by Price: Low to High
+          </button>
+          <button
+            className="px-1 py-1 bg-gray-500 text-white rounded"
+            onClick={() => setSortOrder("desc")}
+          >
+            Sort by Price: High to Low
+          </button>
+        </div>
       </div>
-      <ProductCards products={filteredProducts} />
+
+      <ProductCards products={sortedProducts} />
     </section>
   );
 }
