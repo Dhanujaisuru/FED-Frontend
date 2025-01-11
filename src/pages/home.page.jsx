@@ -4,6 +4,7 @@ import Products from "./../Products"
 import PaginationComponent from "./../Pagination";
 import { useState } from "react";
 
+
 function HomePage() {
   const name = null;
   const [cart, setCart] = useState([]);

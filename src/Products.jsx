@@ -1,35 +1,43 @@
 import ProductCards from "./ProductCards";
 import { Separator } from "@/components/ui/separator";
 import Tab from "./Tab";
-import { useEffect, useState } from "react";
-import { getProducts } from "@/lib/api";
-import { Skeleton } from "./components/ui/skeleton";
+import { useState } from "react";
+import { useGetCategoriesQuery, useGetProductsQuery } from "@/lib/api";
+import { Skeleton } from "@/components/ui/skeleton";
 
 function Products(props) {
-  const [products, setProducts] = useState([]);
-  const [isProductsLoading, setIsProductsLoading] = useState(true);
-  const [productsError, setProductsError] = useState({
-    isError: false,
-    message: "",
-  });
+  // Fetch products and categories using RTK Query
+  const {
+    data: products = [],
+    isLoading: isProductsLoading,
+    isError: isProductsError,
+    error: productsError,
+  } = useGetProductsQuery();
 
+  const {
+    data: fetchedCategories = [],
+    isLoading: isCategoriesLoading,
+    isError: isCategoriesError,
+    error: categoriesError,
+  } = useGetCategoriesQuery();
+
+  // Add "All" category to the fetched categories
   const categories = [
-    { _id: "ALL", name: "All" },
-    { _id: "1", name: "Headphones" },
-    { _id: "2", name: "Earbuds" },
-    { _id: "3", name: "Speakers" },
-    { _id: "4", name: "Mobile Phones" },
-    { _id: "5", name: "Smart Watches" },
+    { _id: "ALL", name: "All" }, // Manually add "All" category
+    ...fetchedCategories, // Add fetched categories from the API
   ];
 
+  // State for selected category and sort order
   const [selectedCategoryId, setSelectedCategoryId] = useState("ALL");
-  const [sortOrder, setSortOrder] = useState(null); // To track sort order
+  const [sortOrder, setSortOrder] = useState(null);
 
+  // Filter products based on selected category
   const filteredProducts =
     selectedCategoryId === "ALL"
       ? products
       : products.filter((product) => product.categoryId === selectedCategoryId);
 
+  // Sort products based on sort order
   const sortedProducts = [...filteredProducts].sort((a, b) => {
     if (sortOrder === "asc") {
       return parseFloat(a.price) - parseFloat(b.price);
@@ -39,78 +47,56 @@ function Products(props) {
     return 0;
   });
 
+  // Handle tab click to change selected category
   const handleTabClick = (_id) => {
     setSelectedCategoryId(_id);
-    setSortOrder(null);
+    setSortOrder(null); // Reset sort order when category changes
   };
 
-  useEffect(() => {
-    getProducts()
-      .then((data) => {
-        setProducts(data);
-      })
-      .catch((error) => {
-        setProductsError({ isError: true, message: error.message });
-      })
-      .finally(() => setIsProductsLoading(false));
-  }, []);
-
-  if (isProductsLoading) {
+  // Show loading state if products or categories are loading
+  if (isProductsLoading || isCategoriesLoading) {
     return (
       <section className="px-8 py-8">
         <h2 className="text-4xl font-bold">Our Top Products</h2>
-
         <Separator className="mt-2" />
         <div className="mt-4 flex items-center gap-4">
-          {categories.map((category) => (
-            <Tab
-              key={category._id}
-              _id={category._id}
-              selectedCategoryId={selectedCategoryId}
-              name={category.name}
-              onTabClick={handleTabClick}
-            />
+          {/* Render skeleton tabs for loading state */}
+          {Array.from({ length: 5 }).map((_, index) => (
+            <Skeleton key={index} className="h-10 w-24" />
           ))}
         </div>
         <div className="grid grid-cols-4 gap-4 mt-4">
-          <Skeleton className="h-80" />
-          <Skeleton className="h-80" />
-          <Skeleton className="h-80" />
-          <Skeleton className="h-80" />
+          {/* Render skeleton cards for loading state */}
+          {Array.from({ length: 4 }).map((_, index) => (
+            <Skeleton key={index} className="h-80" />
+          ))}
         </div>
       </section>
     );
   }
 
-  if (productsError.isError) {
+  // Show error state if there's an error fetching products or categories
+  if (isProductsError || isCategoriesError) {
     return (
       <section className="px-8 py-8">
         <h2 className="text-4xl font-bold">Our Top Products</h2>
-
         <Separator className="mt-2" />
-        <div className="mt-4 flex items-center gap-4">
-          {categories.map((category) => (
-            <Tab
-              key={category._id}
-              _id={category._id}
-              selectedCategoryId={selectedCategoryId}
-              name={category.name}
-              onTabClick={handleTabClick}
-            />
-          ))}
-        </div>
         <div className="mt-4">
-          <p className="text-red-500">{productsError.message}</p>
+          <p className="text-red-500">
+            Error: {productsError?.message || categoriesError?.message}
+          </p>
         </div>
       </section>
     );
   }
 
+  // Render the main component
   return (
     <section className="px-8 py-8">
       <h2 className="text-4xl font-bold">Our Top Products</h2>
       <Separator className="mt-2" />
       <div className="mt-4 flex items-center gap-4">
+        {/* Render category tabs, including the "All" button */}
         {categories.map((category) => (
           <Tab
             key={category._id}
@@ -121,6 +107,7 @@ function Products(props) {
           />
         ))}
 
+        {/* Sort buttons */}
         <div className="flex gap-2 ml-auto">
           <button
             className="px-1 py-1 bg-gray-500 text-white rounded"
@@ -136,6 +123,7 @@ function Products(props) {
           </button>
         </div>
       </div>
+      {/* Render product cards */}
       <ProductCards handleAddToCart={props.handleAddToCart} products={sortedProducts} />
     </section>
   );
