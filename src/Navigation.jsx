@@ -1,8 +1,9 @@
 import { ShoppingCart } from "lucide-react";
 import { Link } from "react-router";
-import { useSelector } from "react-redux";
 
 import { SignedIn, SignedOut, UserButton } from "@clerk/clerk-react";
+import { useSelector } from "react-redux";
+
 
 function Navigation(props) {
 
@@ -29,14 +30,15 @@ function Navigation(props) {
       </div>
       <div className="flex items-center gap-4">
         <div>
-          <a href="/shop/cart" className="flex items-center gap-4 relative">
+          <Link to="/shop/cart" className="flex items-center gap-4 relative">
             <p className="text-lg">{getCartQuantity()}</p>
             <div className="flex items-center gap-2">
               <ShoppingCart />
               Cart
             </div>
-          </a>
+          </Link>
         </div>
+
         <SignedOut>
           <div className="flex items-center gap-4">
             <Link to="/sign-in" className=" text-primary ">
@@ -49,8 +51,8 @@ function Navigation(props) {
         </SignedOut>
 
         <SignedIn>
-          <Link to={"/account"}>Account</Link>
           <UserButton />
+          <Link to={"/account"}>Account</Link>
         </SignedIn>
 
       </div>
