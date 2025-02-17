@@ -11,6 +11,7 @@ import AccountPage from "./pages/account.page";
 import ShopPage from "./pages/shop.page";
 import CheckoutPage from "./pages/checkout.page";
 import PaymentPage from "./pages/payment.page";
+import CompletePage from "./pages/complete.page";
 
 // Import your store
 import { store } from "@/lib/store";
@@ -42,8 +43,9 @@ createRoot(document.getElementById("root")).render(
               <Route path="/" element={<HomePage />} />
               <Route path="/shop" element={<ShopPage />} />
               <Route path="/shop/cart" element={<CartPage />} />
-              <Route path="/shop/checkout" element={<CheckoutPage />} />
-              <Route path="/checkout/payment" element={<PaymentPage />} />
+              <Route path="/cart/checkout" element={<CheckoutPage />} />
+              <Route path="/shop/payment" element={<PaymentPage />} />
+              <Route path="/shop/complete" element={<CompletePage />} />
               <Route path="/account" element={<AccountPage />} />
             </Route>
             <Route path="/sign-in" element={<SignInPage />} />

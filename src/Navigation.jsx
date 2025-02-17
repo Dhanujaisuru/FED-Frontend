@@ -20,12 +20,12 @@ function Navigation(props) {
   return (
     <nav className="flex items-center justify-between py-8 px-8">
       <div className="flex gap-x-16">
-        <a className="font-semibold text-3xl" href="/">
+        <Link className="font-semibold text-3xl" to="/">
           Mebius
-        </a>
+        </Link>
         <div className="flex items-center gap-4">
-          <a href="/">Home</a>
-          <a href="/shop">Shop</a>
+          <Link to="/">Home</Link>
+          <Link to="/shop">Shop</Link>
         </div>
       </div>
       <div className="flex items-center gap-4">
@@ -51,8 +51,8 @@ function Navigation(props) {
         </SignedOut>
 
         <SignedIn>
-          <UserButton />
           <Link to={"/account"}>Account</Link>
+          <UserButton />
         </SignedIn>
 
       </div>
