@@ -5,22 +5,17 @@ import { Link, useSearchParams } from "react-router";
 function CompletePage() {
   const [searchParams] = useSearchParams();
   const orderId = searchParams.get("orderId");
-
-  const { data, isLoading } = useGetOrderQuery(orderId || ""); // Avoid null errors
+  const { data, isLoading } = useGetOrderQuery(orderId);
 
   if (isLoading) {
     return <main className="px-8">Loading...</main>;
-  }
-
-  if (!data) {
-    return <main className="px-8">Error: Order not found</main>;
   }
 
   return (
     <main className="px-8">
       <h2 className="text-4xl font-bold">Order Successful</h2>
       <div className="mt-4">
-        {data.items?.map((item, index) => (
+        {data.items.map((item, index) => (
           <div key={index}>
             <p>{item.product.name}</p>
             <p>{item.product.price}</p>
@@ -31,7 +26,7 @@ function CompletePage() {
       <div className="mt-4">
         <p>
           Total Price: $
-          {data.items?.reduce(
+          {data.items.reduce(
             (acc, item) => acc + item.product.price * item.quantity,
             0
           )}
@@ -42,12 +37,12 @@ function CompletePage() {
         <p>Order ID: {data._id}</p>
         <p>Order Status: {data.paymentStatus}</p>
         <p className="mt-2 text-lg">Shipping Address</p>
-        <p>{data.addressId?.line_1}</p>
-        <p>{data.addressId?.line_2}</p>
-        <p>{data.addressId?.city}</p>
-        <p>{data.addressId?.state}</p>
-        <p>{data.addressId?.zip_code}</p>
-        <p>{data.addressId?.phone}</p>
+        <p>{data.addressId.line_1}</p>
+        <p>{data.addressId.line_2}</p>
+        <p>{data.addressId.city}</p>
+        <p>{data.addressId.state}</p>
+        <p>{data.addressId.zip_code}</p>
+        <p>{data.addressId.phone}</p>
       </div>
 
       <div className="mt-4">

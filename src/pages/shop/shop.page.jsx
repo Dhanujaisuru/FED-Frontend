@@ -2,8 +2,8 @@ import { useGetCategoriesQuery, useGetProductsQuery } from "@/lib/api"
 import { useState } from "react"
 import { Separator } from "@/components/ui/separator"
 import { Skeleton } from "@/components/ui/skeleton"
-import ProductCards from "./../ProductCards"
-import Tab from "./../Tab"
+import ProductCards from "../home/components/ProductCards"
+import Tab from "../home/components/Tab"
 
 function ShopPage() {
   // Fetch products and categories using RTK Query
@@ -51,7 +51,7 @@ function ShopPage() {
   // Show loading state if products or categories are loading
   if (isProductsLoading || isCategoriesLoading) {
     return (
-      <main className="container mx-auto px-4 py-8">
+      <main className="container mx-auto px-4 py-4">
         <h1 className="text-3xl font-bold mb-4">Shop</h1>
         <Separator className="my-4" />
         <div className="flex items-center gap-4 mb-4">

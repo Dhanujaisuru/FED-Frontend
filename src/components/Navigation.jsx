@@ -1,13 +1,14 @@
 import { ShoppingCart } from "lucide-react";
 import { Link } from "react-router";
 
-import { SignedIn, SignedOut, UserButton } from "@clerk/clerk-react";
+import { SignedIn, SignedOut, UserButton, useUser } from "@clerk/clerk-react";
 import { useSelector } from "react-redux";
 
 
 function Navigation(props) {
 
   const cart = useSelector((state) => state.cart.value);
+  const { user } = useUser();
 
   const getCartQuantity = () => {
     let count = 0;
@@ -26,6 +27,10 @@ function Navigation(props) {
         <div className="flex items-center gap-4">
           <Link to="/">Home</Link>
           <Link to="/shop">Shop</Link>
+          {/* Conditionally render the admin dashboard link */}
+          {user && user.publicMetadata.role === "admin" && (
+            <Link to="/admin/products/create">Add Product</Link>
+          )}
         </div>
       </div>
       <div className="flex items-center gap-4">
@@ -51,7 +56,7 @@ function Navigation(props) {
         </SignedOut>
 
         <SignedIn>
-          <Link to={"/account"}>Account</Link>
+          <Link to={"/orderhistory"}>Order History</Link>
           <UserButton />
         </SignedIn>
 

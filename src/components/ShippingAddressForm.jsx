@@ -54,7 +54,6 @@ const ShippingAddressForm = ({ cart }) => {
     });
     navigate("/shop/payment");
   }
-
   return (
     <div>
       <Form {...form}>
@@ -93,7 +92,7 @@ const ShippingAddressForm = ({ cart }) => {
                 <FormItem>
                   <FormLabel>City</FormLabel>
                   <FormControl>
-                    <Input placeholder="Kadawatha" {...field} />
+                    <Input placeholder="Colombo" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -132,7 +131,7 @@ const ShippingAddressForm = ({ cart }) => {
                 <FormItem>
                   <FormLabel>Phone Number</FormLabel>
                   <FormControl>
-                    <Input placeholder="+94702700100" {...field} />
+                    <Input placeholder="+94700170300" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
