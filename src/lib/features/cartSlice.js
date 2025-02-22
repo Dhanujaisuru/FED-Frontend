@@ -46,7 +46,7 @@ export const cartSlice = createSlice({
     const foundItem = state.value.find((item) => item.product._id === productId);
 
     if (foundItem) {
-      foundItem.quantity = Math.max(1, quantity); // Prevent quantity going below 1
+      foundItem.quantity = Math.max(1, quantity);
     }
 
     localStorage.setItem("cart", JSON.stringify(state.value));

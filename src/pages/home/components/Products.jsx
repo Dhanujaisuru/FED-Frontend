@@ -21,10 +21,10 @@ function Products(props) {
     error: categoriesError,
   } = useGetCategoriesQuery();
 
-  // Add "All" category to the fetched categories
+  
   const categories = [
-    { _id: "ALL", name: "All" }, // Manually add "All" category
-    ...fetchedCategories, // Add fetched categories from the API
+    { _id: "ALL", name: "All" },
+    ...fetchedCategories,
   ];
 
   // State for selected category and sort order
@@ -50,7 +50,7 @@ function Products(props) {
   // Handle tab click to change selected category
   const handleTabClick = (_id) => {
     setSelectedCategoryId(_id);
-    setSortOrder(null); // Reset sort order when category changes
+    setSortOrder(null); 
   };
 
   // Show loading state if products or categories are loading

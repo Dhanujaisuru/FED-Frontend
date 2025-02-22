@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { useDispatch } from "react-redux";
 import { addToCart } from "@/lib/features/cartSlice";
 import { useNavigate } from "react-router";
-import { useGetProductByIdQuery } from "@/lib/api"; // Import the query hook
+import { useGetProductByIdQuery } from "@/lib/api";
 
 function ProductCard(props) {
   const dispatch = useDispatch();
