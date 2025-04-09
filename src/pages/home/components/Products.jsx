@@ -98,13 +98,14 @@ function Products(props) {
 
         <div className="flex gap-2 ml-auto">
           <Button
-            variant={sortOrder === "asc" ? "default" : "secondary"}
+            variant="outline"
+            className={sortOrder === "asc" ? "border-gray-500" : ""}
             onClick={() => setSortOrder("asc")}
           >
             Sort by Price: Low to High
           </Button>
           <Button
-            variant={sortOrder === "desc" ? "default" : "secondary"}
+            className={sortOrder === "desc" ? "border-gray-500" : ""}
             onClick={() => setSortOrder("desc")}
           >
             Sort by Price: High to Low
