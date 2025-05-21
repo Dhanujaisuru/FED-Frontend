@@ -4,6 +4,14 @@ import { Separator } from "@/components/ui/separator"
 import { Skeleton } from "@/components/ui/skeleton"
 import ProductCards from "../home/components/ProductCards"
 import Tab from "../home/components/Tab"
+import { SlidersHorizontal} from "lucide-react"; 
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
 
 function ShopPage() {
   // Fetch products and categories using RTK Query
@@ -26,7 +34,7 @@ function ShopPage() {
 
   // State for selected category and sort order
   const [selectedCategoryId, setSelectedCategoryId] = useState("ALL")
-  const [sortOrder, setSortOrder] = useState(null)
+  const [sortOrder, setSortOrder] = useState("asc");
 
   // Filter products based on selected category
   const filteredProducts =
@@ -44,8 +52,8 @@ function ShopPage() {
 
   // Handle tab click to change selected category
   const handleTabClick = (_id) => {
-    setSelectedCategoryId(_id)
-    setSortOrder(null) // Reset sort order when category changes
+    setSelectedCategoryId(_id);
+    setSortOrder("asc");
   }
 
   // Show loading state if products or categories are loading
@@ -96,18 +104,19 @@ function ShopPage() {
         ))}
 
         <div className="flex gap-2 ml-auto">
-          <button
-            className="px-1 py-1 bg-gray-500 text-white rounded"
-            onClick={() => setSortOrder("asc")}
-          >
-            Sort by Price: Low to High
-          </button>
-          <button
-            className="px-1 py-1 bg-gray-500 text-white rounded"
-            onClick={() => setSortOrder("desc")}
-          >
-            Sort by Price: High to Low
-          </button>
+          <div className="flex items-center gap-2">
+            <SlidersHorizontal size={18} className="text-slate-500" />
+            <span className="text-sm font-medium hidden sm:inline">Sort by:</span>
+            <Select value={sortOrder} onValueChange={setSortOrder}>
+              <SelectTrigger className="w-[180px] h-9 text-sm">
+                <SelectValue placeholder="Sort by" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="asc">Price: Low to High</SelectItem>
+                <SelectItem value="desc">Price: High to Low</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
       </div>
       <ProductCards products={sortedProducts} />

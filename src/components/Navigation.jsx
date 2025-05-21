@@ -1,9 +1,7 @@
 import { ShoppingCart } from "lucide-react";
 import { Link } from "react-router";
-
 import { SignedIn, SignedOut, UserButton, useUser } from "@clerk/clerk-react";
 import { useSelector } from "react-redux";
-
 
 function Navigation(props) {
 
@@ -19,7 +17,7 @@ function Navigation(props) {
   };
 
   return (
-    <nav className="flex items-center justify-between py-8 px-8">
+    <nav className="flex items-center justify-between py-6 px-6 shadow-md border-b rounded-b-xl bg-white text-sm">
       <div className="flex gap-x-16">
         <Link className="font-semibold text-3xl" to="/">
           Mebius
@@ -29,7 +27,10 @@ function Navigation(props) {
           <Link to="/shop">Shop</Link>
           {/* Conditionally render the admin dashboard link */}
           {user && user.publicMetadata.role === "admin" && (
-            <Link to="/admin/products/create">Add Product</Link>
+            <>
+              <Link to="/admin/products/create">Products</Link>
+              {/* <Link to="/admin/orderslist">Orders</Link> */}
+            </>
           )}
         </div>
       </div>

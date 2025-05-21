@@ -12,7 +12,7 @@ function CheckoutPage() {
 
   // Calculate subtotal and total
   const subtotal = cart.reduce((acc, item) => acc + item.product.price * item.quantity, 0);
-  const shippingCost = 100.0; 
+  const shippingCost = 0.0; 
   const total = subtotal + shippingCost;
 
   // Handle order submission

@@ -21,22 +21,21 @@ import {
 import { useGetCategoriesQuery } from "@/lib/api";
 import { useEffect } from "react";
 
-// Updated schema with "stock" instead of "inventory"
 const formSchema = z.object({
   category: z.string().min(1, "Category is required"),
   image: z.string().min(1, "Image path is required"),
   name: z.string().min(1, "Name is required"),
   price: z.number().min(0, "Price must be a positive number"),
   description: z.string().min(1, "Description is required"),
-  stock: z.number().min(0, "Stock must be a positive number").optional(), // Changed to "stock"
+  stock: z.number().min(0, "Stock must be a positive number").optional(),
 });
 
 const ProductForm = ({ onSubmit, isSubmitting }) => {
   const { data: categories = [], isLoading: loadingCategories, error } = useGetCategoriesQuery();
 
-  console.log("Categories from query:", categories); // Debug: Check raw data
-  console.log("Loading state:", loadingCategories); // Debug: Check loading
-  console.log("Error state:", error); // Debug: Check errors
+  console.log("Categories from query:", categories);
+  console.log("Loading state:", loadingCategories);
+  console.log("Error state:", error);
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -64,7 +63,7 @@ const ProductForm = ({ onSubmit, isSubmitting }) => {
         category: "",
         image: "",
         name: "",
-        price: 0,
+        price: 0.00,
         description: "",
         stock: 0,
       });

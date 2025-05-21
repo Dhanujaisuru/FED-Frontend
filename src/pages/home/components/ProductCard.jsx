@@ -9,30 +9,26 @@ function ProductCard(props) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // Fetch product data from the database using the product's _id
   const { data: product, error, isLoading } = useGetProductByIdQuery(props._id);
 
-  // Log for debugging
   console.log("ProductCard props:", props);
   console.log("Fetched product data:", product);
 
-  // Handle loading and error states
   if (isLoading) {
     return (
-      <Card>
+      <Card className="overflow-hidden shadow-lg bg-gray-100 animate-pulse">
         <div className="p-4 text-gray-600">Loading...</div>
       </Card>
     );
   }
   if (error || !product) {
     return (
-      <Card>
+      <Card className="overflow-hidden shadow-lg bg-red-50">
         <div className="p-4 text-red-600">Error loading product</div>
       </Card>
     );
   }
 
-  // Use fetched stock from the database
   const stock = Number(product.stock) || 0;
   const isOutOfStock = stock < 1;
 
@@ -43,6 +39,7 @@ function ProductCard(props) {
           _id: product._id,
           name: product.name,
           price: product.price,
+          stripePriceId: product.stripePriceId,
           image: product.image,
           description: product.description,
           quantity: 1,
@@ -58,33 +55,47 @@ function ProductCard(props) {
   };
 
   return (
-    <Card>
-      <div className="h-80 bg-card rounded-lg p-4 relative">
+    <Card className="overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 bg-white rounded-xl">
+      {/* Image Section with Gradient Overlay */}
+      <div className="relative h-80 group">
         <img
           src={product.image}
-          className="block w-full h-full object-cover"
+          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
           alt={product.name}
         />
+        <div className="absolute inset-0 bg-gradient-to-t from-gray-900/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
       </div>
-      <div className="flex px-4 mt-4 items-center justify-between">
-        <h2 className="text-2xl font-semibold">{product.name}</h2>
-        <span className="block text-lg font-medium">${product.price}</span>
-      </div>
-      <div className="px-4 mt-2">
-        <p className="text-sm">{product.description || "No description available"}</p>
-        <p className={`text-sm ${isOutOfStock ? "text-red-600" : "text-green-500"} pt-2`}>
+
+      {/* Content Section */}
+      <div className="p-4">
+        <div className="flex items-center justify-between">
+          <h2 className="text-2xl font-semibold text-gray-800 truncate">{product.name}</h2>
+          <span className="text-lg font-medium text-blue-600">${product.price}</span>
+        </div>
+        <p className="mt-2 text-sm text-gray-600 line-clamp-2">
+          {product.description || "No description available"}
+        </p>
+        <p
+          className={`mt-2 text-sm font-medium ${
+            isOutOfStock ? "text-red-600" : "text-green-500"
+          }`}
+        >
           {isOutOfStock ? "Out of Stock" : `Available: ${stock}`}
         </p>
       </div>
-      <div className="mt-1 p-4 flex gap-2">
-        <Button className="w-full border border-black" variant="outline" onClick={handleViewProduct}>
+
+      {/* Buttons Section */}
+      <div className="p-4 flex gap-3 border-t border-gray-200">
+        <Button
+          className="w-full bg-white text-gray-800 border border-gray-300 hover:bg-gray-100 rounded-lg transition-colors duration-200"
+          variant="outline"
+          onClick={handleViewProduct}
+        >
           View Product
         </Button>
         <Button
-          className={`w-full ${
-            isOutOfStock
-              ? "bg-red-500 hover:bg-red-500 cursor-not-allowed"
-              : ""
+          className={`w-full rounded-lg transition-colors duration-200 ${
+            isOutOfStock ? "bg-red-500 hover:bg-red-500 cursor-not-allowed" : ""
           }`}
           onClick={handleClick}
           disabled={isOutOfStock}
@@ -97,6 +108,8 @@ function ProductCard(props) {
 }
 
 export default ProductCard;
+
+
 
 // import { Card } from "@/components/ui/card";
 // import { Button } from "@/components/ui/button";

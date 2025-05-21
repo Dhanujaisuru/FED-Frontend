@@ -1,4 +1,3 @@
-// OrderHistory.jsx
 import { useAuth, useUser } from "@clerk/clerk-react";
 import { Navigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";

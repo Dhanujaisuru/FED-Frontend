@@ -4,7 +4,14 @@ import Tab from "./Tab";
 import { useState } from "react";
 import { useGetCategoriesQuery, useGetProductsQuery } from "@/lib/api";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Button } from "@/components/ui/button";
+import { SlidersHorizontal} from "lucide-react"; 
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
 
 function Products(props) {
   const {
@@ -46,6 +53,7 @@ function Products(props) {
 
   const handleTabClick = (_id) => {
     setSelectedCategoryId(_id);
+    setSortOrder("asc");
   };
 
   if (isProductsLoading || isCategoriesLoading) {
@@ -97,21 +105,21 @@ function Products(props) {
         ))}
 
         <div className="flex gap-2 ml-auto">
-          <Button
-            variant="outline"
-            className={sortOrder === "asc" ? "bg-gray-700 text-white" : "bg-gray-100"}
-            onClick={() => setSortOrder("asc")}
-          >
-            Sort by Price: Low to High
-          </Button>
-          <Button
-            variant="outline"
-            className={sortOrder === "desc" ? "bg-gray-700 text-white" : "bg-gray-100"}
-            onClick={() => setSortOrder("desc")}
-          >
-            Sort by Price: High to Low
-          </Button>
+          <div className="flex items-center gap-2">
+            <SlidersHorizontal size={18} className="text-slate-500" />
+            <span className="text-sm font-medium hidden sm:inline">Sort by:</span>
+            <Select value={sortOrder} onValueChange={setSortOrder}>
+              <SelectTrigger className="w-[180px] h-9 text-sm">
+                <SelectValue placeholder="Sort by" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="asc">Price: Low to High</SelectItem>
+                <SelectItem value="desc">Price: High to Low</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
+
       </div>
       <ProductCards handleAddToCart={props.handleAddToCart} products={sortedProducts} />
     </section>

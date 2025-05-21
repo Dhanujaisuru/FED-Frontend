@@ -20,7 +20,9 @@ import RootLayout from "./layouts/rootLayout/root.layout";
 import OrderHistory from "./pages/order-history.page";
 import CompletePage from "./pages/complete.page";
 import PaymentPage from "./pages/payment.page";
-import ProductPage from "./pages/shop/ProductPage";
+import ProductPage from "./pages/shop/product.page";
+import OrdersList from "./pages/order/orders-list"
+import OrderDetails from "./pages/order/order-details";
 
 
 import AdminProductCreatePage from "./pages/admin-product-create.page";
@@ -54,6 +56,8 @@ createRoot(document.getElementById("root")).render(
                 {/* The AdminProtected layout can be used to wrap routes that needs to be logged in as admin to access */}
                 <Route element={<AdminProtected />}>
                   <Route path="/admin/products/create" element={<AdminProductCreatePage />} />
+                  <Route path="/admin/orderslist" element={<OrdersList />} />
+                  <Route path="/admin/orderslist/:OrderId" element={<OrderDetails />} />
                 </Route>
               </Route>
             </Route>

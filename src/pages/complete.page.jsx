@@ -1,57 +1,62 @@
 import { Button } from "@/components/ui/button";
-import { useGetOrderQuery } from "@/lib/api";
-import { Link, useSearchParams } from "react-router";
+import { useGetOrderQuery, useGetCheckoutSessionStatusQuery } from "@/lib/api";
+import { Link, useSearchParams, Navigate } from "react-router";
+import { useState, useEffect } from "react";
+
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 function CompletePage() {
-  const [searchParams] = useSearchParams();
-  const orderId = searchParams.get("orderId");
-  const { data, isLoading } = useGetOrderQuery(orderId);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const sessionId = searchParams.get("session_id");
+
+  const { data, isLoading, isError } =
+    useGetCheckoutSessionStatusQuery(sessionId);
 
   if (isLoading) {
-    return <main className="px-8">Loading...</main>;
+    return <div>Loading...</div>;
   }
 
-  return (
-    <main className="px-8">
-      <h2 className="text-4xl font-bold">Order Successful</h2>
-      <div className="mt-4">
-        {data.items.map((item, index) => (
-          <div key={index}>
-            <p>{item.product.name}</p>
-            <p>{item.product.price}</p>
-            <p>{item.quantity}</p>
-          </div>
-        ))}
-      </div>
-      <div className="mt-4">
-        <p>
-          Total Price: $
-          {data.items.reduce(
-            (acc, item) => acc + item.product.price * item.quantity,
-            0
-          )}
+  if (isError) {
+    return <div>Error</div>;
+  }
+
+  if (data?.status === "open") {
+    return <Navigate to="/checkout" />;
+  }
+
+  if (data?.status === "complete") {
+    return (
+      <section id="success" className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-md">
+        <h2 className="text-2xl font-bold mb-4 text-green-600">Order Completed Successfully!</h2>
+        <p className="mb-4">
+          We appreciate your business! A confirmation email will be sent to{" "}
+          <span className="font-semibold">{data.customer_email}</span>.
         </p>
-      </div>
-
-      <div className="mt-4">
-        <p>Order ID: {data._id}</p>
-        <p>Order Status: {data.paymentStatus}</p>
-        <p className="mt-2 text-lg">Shipping Address</p>
-        <p>{data.addressId.line_1}</p>
-        <p>{data.addressId.line_2}</p>
-        <p>{data.addressId.city}</p>
-        <p>{data.addressId.state}</p>
-        <p>{data.addressId.zip_code}</p>
-        <p>{data.addressId.phone}</p>
-      </div>
-
-      <div className="mt-4">
-        <Button asChild>
-          <Link to="/shop">Continue Shopping</Link>
+        
+        <div className="mt-6 border-t pt-4">
+          <h3 className="text-lg font-semibold mb-2">Order Details:</h3>
+          <p className="mb-2">Order ID: <span className="font-medium">{data.orderId}</span></p>
+          <p className="mb-2">Order Status: <span className="font-medium">{data.orderStatus}</span></p>
+          <p className="mb-2">Payment Status: <span className="font-medium">{data.paymentStatus}</span></p>
+        </div>
+        
+        <div className="mt-6">
+          <p>
+            If you have any questions, please email{" "}
+            <a href="mailto:orders@example.com" className="text-blue-600 hover:underline">
+              orders@example.com
+            </a>.
+          </p>
+        </div>
+        
+        <Button asChild className="mt-6">
+          <Link to="/">Return to Home</Link>
         </Button>
-      </div>
-    </main>
-  );
+      </section>
+    );
+  }
+
+  return null;
 }
 
 export default CompletePage;
